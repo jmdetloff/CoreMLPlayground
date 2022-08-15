@@ -1,2 +1,2 @@
 # CoreMLPlayground
-A small demo project to use as a template when creating repro's of specific CoreML cases.
+A small project to serve as a demonstration of model load times.
