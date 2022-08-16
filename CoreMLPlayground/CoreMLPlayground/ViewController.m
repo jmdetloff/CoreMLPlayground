@@ -14,24 +14,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIButton *demoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 100, 150, 50)];
-    [demoButton setTitle:@"Press" forState:UIControlStateNormal];
-    [demoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    demoButton.layer.borderColor = [UIColor blackColor].CGColor;
-    demoButton.layer.cornerRadius = 15;
-    demoButton.layer.borderWidth = 2;
-    [self.view addSubview:demoButton];
+    UIButton *allDemoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 100, 300, 50)];
+    [allDemoButton setTitle:@"Load for All Units" forState:UIControlStateNormal];
+    [allDemoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    allDemoButton.layer.borderColor = [UIColor blackColor].CGColor;
+    allDemoButton.layer.cornerRadius = 15;
+    allDemoButton.layer.borderWidth = 2;
+    [self.view addSubview:allDemoButton];
     
-    [demoButton addTarget:self action:@selector(demoPressed) forControlEvents:UIControlEventTouchUpInside];
+    [allDemoButton addTarget:self action:@selector(demoPressedAllComputeUnits) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIButton *cpuDemoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 300, 300, 50)];
+    [cpuDemoButton setTitle:@"Load for CPU" forState:UIControlStateNormal];
+    [cpuDemoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    cpuDemoButton.layer.borderColor = [UIColor blackColor].CGColor;
+    cpuDemoButton.layer.cornerRadius = 15;
+    cpuDemoButton.layer.borderWidth = 2;
+    [self.view addSubview:cpuDemoButton];
+    
+    [cpuDemoButton addTarget:self action:@selector(demoPressedCPUOnly) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)demoPressed {
+- (void)demoPressedAllComputeUnits {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self _loadModelDemo];
+        [self _loadModelDemo:MLComputeUnitsAll];
     });
 }
 
-- (void)_loadModelDemo {
+- (void)demoPressedCPUOnly {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self _loadModelDemo:MLComputeUnitsCPUOnly];
+    });
+}
+
+
+- (void)_loadModelDemo:(MLComputeUnits)computeUnits {
     NSError *error;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -57,7 +75,7 @@
     
     // Load the MLModel instance from the cached compiled model file
     MLModelConfiguration* config = [[MLModelConfiguration alloc] init];
-    config.computeUnits = MLComputeUnitsAll;
+    config.computeUnits = computeUnits;
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
     MLModel *model = [MLModel modelWithContentsOfURL:compiledModelURL configuration:config error:&error];
     CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
