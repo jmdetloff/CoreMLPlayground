@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C85A2A228AF63DB0094CAC6 /* mobilenetv2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C85A29F28AF63DB0094CAC6 /* mobilenetv2.mlmodel */; };
+		4C85A2A328AF63DB0094CAC6 /* mobilenetv2_flexible.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C85A2A028AF63DB0094CAC6 /* mobilenetv2_flexible.mlmodel */; };
+		4C85A2A428AF63DB0094CAC6 /* mobilenetv2_enumerated.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4C85A2A128AF63DB0094CAC6 /* mobilenetv2_enumerated.mlmodel */; };
 		4CA1A6B4289D68E300EA1C79 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1A6B3289D68E300EA1C79 /* AppDelegate.m */; };
 		4CA1A6B7289D68E300EA1C79 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1A6B6289D68E300EA1C79 /* SceneDelegate.m */; };
 		4CA1A6BA289D68E300EA1C79 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1A6B9289D68E300EA1C79 /* ViewController.m */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C85A29F28AF63DB0094CAC6 /* mobilenetv2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = mobilenetv2.mlmodel; path = ../../mobilenetv2.mlmodel; sourceTree = "<group>"; };
+		4C85A2A028AF63DB0094CAC6 /* mobilenetv2_flexible.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = mobilenetv2_flexible.mlmodel; path = ../../mobilenetv2_flexible.mlmodel; sourceTree = "<group>"; };
+		4C85A2A128AF63DB0094CAC6 /* mobilenetv2_enumerated.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = mobilenetv2_enumerated.mlmodel; path = ../../mobilenetv2_enumerated.mlmodel; sourceTree = "<group>"; };
 		4CA1A6AF289D68E300EA1C79 /* CoreMLPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreMLPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA1A6B2289D68E300EA1C79 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4CA1A6B3289D68E300EA1C79 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -61,6 +67,9 @@
 		4CA1A6B1289D68E300EA1C79 /* CoreMLPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				4C85A2A128AF63DB0094CAC6 /* mobilenetv2_enumerated.mlmodel */,
+				4C85A2A028AF63DB0094CAC6 /* mobilenetv2_flexible.mlmodel */,
+				4C85A29F28AF63DB0094CAC6 /* mobilenetv2.mlmodel */,
 				4CA1A6B2289D68E300EA1C79 /* AppDelegate.h */,
 				4CA1A6B3289D68E300EA1C79 /* AppDelegate.m */,
 				4CA1A6B5289D68E300EA1C79 /* SceneDelegate.h */,
@@ -149,7 +158,10 @@
 				4CA1A6BA289D68E300EA1C79 /* ViewController.m in Sources */,
 				4CA1A6B4289D68E300EA1C79 /* AppDelegate.m in Sources */,
 				4CA1A6C5289D68E500EA1C79 /* main.m in Sources */,
+				4C85A2A328AF63DB0094CAC6 /* mobilenetv2_flexible.mlmodel in Sources */,
+				4C85A2A428AF63DB0094CAC6 /* mobilenetv2_enumerated.mlmodel in Sources */,
 				4CA1A6B7289D68E300EA1C79 /* SceneDelegate.m in Sources */,
+				4C85A2A228AF63DB0094CAC6 /* mobilenetv2.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

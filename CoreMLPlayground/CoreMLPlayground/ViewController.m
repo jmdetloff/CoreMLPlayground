@@ -9,6 +9,11 @@
 
 #import "ViewController.h"
 
+#import "mobilenetv2.h"
+#import "mobilenetv2_flexible.h"
+#import "mobilenetv2_enumerated.h"
+#include <stdlib.h>
+
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -24,8 +29,7 @@
     
     [allDemoButton addTarget:self action:@selector(demoPressedAllComputeUnits) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    UIButton *cpuDemoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 300, 300, 50)];
+    UIButton *cpuDemoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 250, 300, 50)];
     [cpuDemoButton setTitle:@"Load for CPU" forState:UIControlStateNormal];
     [cpuDemoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     cpuDemoButton.layer.borderColor = [UIColor blackColor].CGColor;
@@ -34,6 +38,16 @@
     [self.view addSubview:cpuDemoButton];
     
     [cpuDemoButton addTarget:self action:@selector(demoPressedCPUOnly) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *inputDemoButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 400, 300, 50)];
+    [inputDemoButton setTitle:@"Benchmark input types" forState:UIControlStateNormal];
+    [inputDemoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    inputDemoButton.layer.borderColor = [UIColor blackColor].CGColor;
+    inputDemoButton.layer.cornerRadius = 15;
+    inputDemoButton.layer.borderWidth = 2;
+    [self.view addSubview:inputDemoButton];
+    
+    [inputDemoButton addTarget:self action:@selector(demoPressedInputs) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)demoPressedAllComputeUnits {
@@ -48,7 +62,66 @@
     });
 }
 
+- (void)demoPressedInputs {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *shape = @[@(1), @(3), @(224), @(224)];
+        
+        int testCount = 1000;
+        
+        CFAbsoluteTime totalTime = 0;
+        
+        mobilenetv2 *model = [[mobilenetv2 alloc] init];
+        for (int i = 0; i < testCount; i++) {
+            MLMultiArray *randInput = [[MLMultiArray alloc] initWithShape:shape dataType:MLMultiArrayDataTypeFloat32 error:nil];
+            [self rand:randInput];
+            mobilenetv2Input *input = [[mobilenetv2Input alloc] initWithX_1:randInput];
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            mobilenetv2Output *output = [model predictionFromFeatures:input error:nil];
+            CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
+            totalTime += endTime - startTime;
+        }
+        NSLog(@"*** Model inference time: %f", totalTime / testCount);
+        
+        totalTime = 0;
+        
+        mobilenetv2_enumerated *enumeratedModel = [[mobilenetv2_enumerated alloc] init];
+        for (int i = 0; i < testCount; i++) {
+            MLMultiArray *randInput = [[MLMultiArray alloc] initWithShape:shape dataType:MLMultiArrayDataTypeFloat32 error:nil];
+            [self rand:randInput];
+            mobilenetv2_enumeratedInput *input = [[mobilenetv2_enumeratedInput alloc] initWithX_1:randInput];
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            mobilenetv2_enumeratedOutput *output = [enumeratedModel predictionFromFeatures:input error:nil];
+            CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
+            totalTime += endTime - startTime;
+        }
+        NSLog(@"*** Enumerated Input Model inference time: %f", totalTime / testCount);
+        
+        totalTime = 0;
+        
+        mobilenetv2_flexible *flexibleModel = [[mobilenetv2_flexible alloc] init];
+        for (int i = 0; i < testCount; i++) {
+            MLMultiArray *randInput = [[MLMultiArray alloc] initWithShape:shape dataType:MLMultiArrayDataTypeFloat32 error:nil];
+            [self rand:randInput];
+            mobilenetv2_flexibleInput *input = [[mobilenetv2_flexibleInput alloc] initWithX_1:randInput];
+            CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+            mobilenetv2_flexibleOutput *output = [flexibleModel predictionFromFeatures:input error:nil];
+            CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
+            totalTime += endTime - startTime;
+        }
+        NSLog(@"*** Flexible Input Model inference time: %f", totalTime / testCount);
+    });
+}
 
+- (void)rand:(MLMultiArray *)array
+{
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 224; j++) {
+            for (int k = 0; k < 224; k++) {
+                array[0, i, j, k] = @((double)arc4random() / UINT32_MAX);
+            }
+        }
+    }
+}
 - (void)_loadModelDemo:(MLComputeUnits)computeUnits {
     NSError *error;
     
